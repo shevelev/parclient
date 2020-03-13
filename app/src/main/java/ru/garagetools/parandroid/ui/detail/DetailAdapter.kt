@@ -13,11 +13,16 @@ import ru.garagetools.parandroid.models.TransLog
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DetailAdapter(private val context: Context) : RecyclerView.Adapter<DetailAdapter.MyViewHolder>(),
+class DetailAdapter(
+    private val context: Context,
+    transLogViewModel: DetailViewModel,
+    nick: String
+) : RecyclerView.Adapter<DetailAdapter.MyViewHolder>(),
     ItemTouchHelperAdapter {
 
-    //val transLogViewModel = ViewModelProviders.of(FragmentActivity()).get(Main2_VM::class.java)
-
+    //var transLogViewModel = ViewModelProviders.of(FragmentActivity()).get(DetailViewModel::class.java)
+    var t = transLogViewModel
+    val nick = nick
     private var usersList: MutableList<TransLog> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -57,7 +62,8 @@ class DetailAdapter(private val context: Context) : RecyclerView.Adapter<DetailA
 
     override fun onItemDismiss(position: Int) {
        //deleteUser(position)
-        //transLogViewModel.deleteTransLog(position)
+        t.deleteTransLog(position)
+        t.loadList(nick)
     }
 
 //    private fun deleteUser(position: Int) {

@@ -44,11 +44,15 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
 
+        val nick = intent.getStringExtra("nick")
+        val fio = intent.getStringExtra("fio")
+        textView2.text = fio
+
         currentDateTime = findViewById(R.id.currentDateTime)
         setInitialDateTime();
 
         recyclerView = findViewById(R.id.rv_recyclerview2)
-        recyclerAdapter = DetailAdapter(this)
+        recyclerAdapter = DetailAdapter(this, transLogViewModel,nick)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerAdapter
 
@@ -56,9 +60,7 @@ class DetailActivity : AppCompatActivity() {
         mItemTouchHelper = ItemTouchHelper(callback)
         mItemTouchHelper!!.attachToRecyclerView(recyclerView)
 
-        val nick = intent.getStringExtra("nick")
-        val fio = intent.getStringExtra("fio")
-        textView2.text = fio
+
 
         transLogViewModel.loadList(nick)
         transLogViewModel.getListUsers().observe(this, androidx.lifecycle.Observer { it.let {
