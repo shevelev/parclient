@@ -1,4 +1,4 @@
-package ru.garagetools.parandroid
+package ru.garagetools.parandroid.ui.users
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recylcerview_adapter.view.*
+import ru.garagetools.parandroid.ui.detail.DetailActivity
+import ru.garagetools.parandroid.R
 import ru.garagetools.parandroid.models.User
 
-class RUsers : RecyclerView.Adapter<RUsers.MyViewHolder>() {
+class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
 
     private var usersList : List<User> = listOf()
 
@@ -45,7 +47,7 @@ class RUsers : RecyclerView.Adapter<RUsers.MyViewHolder>() {
         }
 
         override fun onClick(v: View) {
-            val nextScreen = Intent(v.context, Main2Activity::class.java)
+            val nextScreen = Intent(v.context, DetailActivity::class.java)
             nextScreen.putExtra("nick", nick)
             nextScreen.putExtra("fio", fio)
             startActivity(v.context, nextScreen, null)

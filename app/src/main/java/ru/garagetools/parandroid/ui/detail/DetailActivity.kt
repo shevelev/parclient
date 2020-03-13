@@ -1,4 +1,4 @@
-package ru.garagetools.parandroid
+package ru.garagetools.parandroid.ui.detail
 
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_user_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.garagetools.parandroid.R
 import ru.garagetools.parandroid.helper.SimpleItemTouchHelperCallback
 import ru.garagetools.parandroid.models.BodyData
 import ru.garagetools.parandroid.models.TransLog
@@ -26,10 +28,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class Main2Activity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
+
+    val transLogViewModel by lazy { ViewModelProviders.of(this).get(DetailViewModel::class.java)}
 
     lateinit var recyclerView: RecyclerView
-    lateinit var recyclerAdapter: RUserDetail
+    lateinit var recyclerAdapter: DetailAdapter
 
     var currentDateTime: TextView? = null
     var dateAndTime = Calendar.getInstance()
@@ -44,7 +48,7 @@ class Main2Activity : AppCompatActivity() {
         setInitialDateTime();
 
         recyclerView = findViewById(R.id.rv_recyclerview2)
-        recyclerAdapter = RUserDetail(this)
+        recyclerAdapter = DetailAdapter(this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = recyclerAdapter
 
@@ -56,11 +60,15 @@ class Main2Activity : AppCompatActivity() {
         val fio = intent.getStringExtra("fio")
         textView2.text = fio
 
-        updateInfo(nick)
+        transLogViewModel.loadList(nick)
+        transLogViewModel.getListUsers().observe(this, androidx.lifecycle.Observer { it.let {
+            recyclerAdapter.setUserListItems(it as MutableList<TransLog>)
+        } })
+
+
 
         button.setOnClickListener {
-            val date =
-                SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(dateAndTime.timeInMillis)
+            val date = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH).format(dateAndTime.timeInMillis)
             val time = SimpleDateFormat("HH:mm", Locale.ENGLISH).format(dateAndTime.timeInMillis)
 
             val bd = BodyData(nick, 3, date, time)
@@ -71,34 +79,17 @@ class Main2Activity : AppCompatActivity() {
                 }
 
                 override fun onResponse(call: Call<TransLog?>, response: Response<TransLog?>) {
-                    Toast.makeText(this@Main2Activity, "Данные добавлены", Toast.LENGTH_LONG).show()
-                    updateInfo(nick)
+                    Toast.makeText(this@DetailActivity, "Данные добавлены", Toast.LENGTH_LONG).show()
+                    transLogViewModel.loadList(nick)
                 }
             })
         }
     }
 
-    fun updateInfo(nick: String) {
-        val listUsers = apiser.getUser7(nick)
-        listUsers.enqueue(object : Callback<List<TransLog>> {
-            override fun onFailure(call: Call<List<TransLog>>, t: Throwable) {
-            }
-
-            override fun onResponse(
-                call: Call<List<TransLog>>,
-                response: Response<List<TransLog>>
-            ) {
-                if (response.body() != null) {
-                    recyclerAdapter.setUserListItems(response.body()!! as MutableList<TransLog>)
-                }
-            }
-        })
-    }
-
     // отображаем диалоговое окно для выбора даты
     fun setDate(v: View?) {
         DatePickerDialog(
-            this@Main2Activity, d,
+            this@DetailActivity, d,
             dateAndTime.get(Calendar.YEAR),
             dateAndTime.get(Calendar.MONTH),
             dateAndTime.get(Calendar.DAY_OF_MONTH)
@@ -109,7 +100,7 @@ class Main2Activity : AppCompatActivity() {
     // отображаем диалоговое окно для выбора времени
     fun setTime(v: View?) {
         TimePickerDialog(
-            this@Main2Activity, t,
+            this@DetailActivity, t,
             dateAndTime.get(Calendar.HOUR_OF_DAY),
             dateAndTime.get(Calendar.MINUTE), true
         )

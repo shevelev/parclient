@@ -1,25 +1,22 @@
-package ru.garagetools.parandroid
+package ru.garagetools.parandroid.ui.detail
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recylcerview_adapter.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import ru.garagetools.parandroid.R
 import ru.garagetools.parandroid.helper.ItemTouchHelperAdapter
 import ru.garagetools.parandroid.models.TransLog
-import ru.garagetools.parandroid.rest.ApiClient
-import ru.garagetools.parandroid.rest.ApiInterface
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RUserDetail(private val context: Context) : RecyclerView.Adapter<RUserDetail.MyViewHolder>(),
+class DetailAdapter(private val context: Context) : RecyclerView.Adapter<DetailAdapter.MyViewHolder>(),
     ItemTouchHelperAdapter {
+
+    //val transLogViewModel = ViewModelProviders.of(FragmentActivity()).get(Main2_VM::class.java)
 
     private var usersList: MutableList<TransLog> = mutableListOf()
 
@@ -59,26 +56,15 @@ class RUserDetail(private val context: Context) : RecyclerView.Adapter<RUserDeta
     }
 
     override fun onItemDismiss(position: Int) {
-       deleteUser(position)
+       //deleteUser(position)
+        //transLogViewModel.deleteTransLog(position)
     }
 
-    private fun deleteUser(position: Int) {
-        val apiser = ApiClient.client.create(ApiInterface::class.java)
-        val delUserTime = apiser.deleteTransLog(usersList[position].idTran)
-
-        delUserTime.enqueue(object : Callback<Int> {
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-                Log.d("qwe","оштбка")
-            }
-
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                Log.d("qwe","удалили")
-            }
-        })
-
-        usersList.remove(usersList[position])
-        Toast.makeText(this.context, "удалено",Toast.LENGTH_LONG).show()
-        notifyItemRemoved(position);
-        notifyDataSetChanged()
-    }
+//    private fun deleteUser(position: Int) {
+//        val apiser = ApiClient.client.create(ApiInterface::class.java)
+//       d
+//        Toast.makeText(this.context, "удалено",Toast.LENGTH_LONG).show()
+//        notifyItemRemoved(position);
+//        notifyDataSetChanged()
+//    }
 }
