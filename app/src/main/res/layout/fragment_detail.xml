@@ -10,13 +10,15 @@
     >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="129dp"
-        tools:layout_editor_absoluteY="91dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="91dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recyclerview2"
@@ -46,15 +48,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Изменить дату"
-            android:onClick="setDate"  />
+            android:text="Изменить дату"/>
 
         <Button android:id="@+id/timeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Изменить время"
-            android:onClick="setTime" />
+            android:text="Изменить время"/>
     </LinearLayout>
 
 
@@ -63,5 +63,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Отправить" />
+
+<!--    <Button-->
+<!--    android:id="@+id/testDialog"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="dialog" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/testDialog2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="dialog" />-->
 
 </LinearLayout>

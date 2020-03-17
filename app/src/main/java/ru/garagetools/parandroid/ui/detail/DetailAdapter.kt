@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DetailAdapter(
-
     val transLogViewModel: DetailViewModel,
     val nick: String?
 ) : RecyclerView.Adapter<DetailAdapter.MyViewHolder>(),
@@ -31,7 +30,6 @@ class DetailAdapter(
     override fun getItemCount() = userDetailList.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        Log.d("qwe", "bind, position = " + position);
         holder.bind(userDetailList[position])
     }
 
@@ -42,7 +40,6 @@ class DetailAdapter(
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val tvName = view.tv_name
-
 
         fun bind(transLog: TransLog) {
             tvName.text = toSimpleString(transLog.trandatetime)

@@ -11,14 +11,14 @@ import ru.garagetools.parandroid.rest.ApiClient
 import ru.garagetools.parandroid.rest.ApiInterface
 
 class DetailViewModel : ViewModel() {
-    var userList: MutableLiveData<List<TransLog>> = MutableLiveData()
+    var userDetailList: MutableLiveData<List<TransLog>> = MutableLiveData()
 
     val apiser = ApiClient.client.create(ApiInterface::class.java)
 
     fun loadList(nick: String?) {
-        val listUsers = apiser.getUser7(nick!!)
+        val getUserDates = apiser.getUser7(nick!!)
 
-        listUsers.enqueue(object : Callback<List<TransLog>> {
+        getUserDates.enqueue(object : Callback<List<TransLog>> {
             override fun onFailure(call: Call<List<TransLog>>, t: Throwable) {
                 Log.d("qwe", "ViewMovel 2 -> Error load Translog ----> ${t.message}")
             }
@@ -28,27 +28,23 @@ class DetailViewModel : ViewModel() {
                 response: Response<List<TransLog>>
             ) {
                 if (response.body() != null) {
-                    userList.value = response.body()
+                    userDetailList.value = response.body()
                 }
             }
         })
     }
 
-    fun getListUsers() = userList
+    fun getListUsers() = userDetailList
 
     fun deleteTransLog(position: Int) {
-        val delUserTime = userList.value?.get(position)?.idTran?.let { apiser.deleteTransLog(it) }
+        userDetailList.value?.get(position)?.idTran?.let { apiser.deleteTransLog(it) }?.enqueue(object : Callback<Int> {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
+                Log.d("qwe", "оштбка")
+            }
 
-        if (delUserTime != null) {
-            delUserTime.enqueue(object : Callback<Int> {
-                override fun onFailure(call: Call<Int>, t: Throwable) {
-                    Log.d("qwe", "оштбка")
-                }
-
-                override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                    Log.d("qwe", "удалили")
-                }
-            })
-        }
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                Log.d("qwe", "удалили")
+            }
+        })
     }
 }
