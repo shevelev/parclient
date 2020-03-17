@@ -1,13 +1,13 @@
 package ru.garagetools.parandroid.ui.users
 
-import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.recylcerview_adapter.view.*
-import ru.garagetools.parandroid.ui.detail.DetailActivity
+import kotlinx.android.synthetic.main.recylcerview_item.view.*
+//import ru.garagetools.parandroid.ui.detail.DetailActivity
 import ru.garagetools.parandroid.R
 import ru.garagetools.parandroid.models.User
 
@@ -16,7 +16,7 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
     private var usersList : List<User> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recylcerview_adapter,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recylcerview_item,parent,false)
         return MyViewHolder(view)
     }
 
@@ -47,10 +47,10 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.MyViewHolder>() {
         }
 
         override fun onClick(v: View) {
-            val nextScreen = Intent(v.context, DetailActivity::class.java)
-            nextScreen.putExtra("nick", nick)
-            nextScreen.putExtra("fio", fio)
-            startActivity(v.context, nextScreen, null)
+            val bundle = Bundle()
+            bundle.putString("nick", nick)
+            bundle.putString("fio", fio)
+            v.findNavController().navigate(R.id.fragmentB, bundle)
         }
     }
 }

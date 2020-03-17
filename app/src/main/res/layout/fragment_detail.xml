@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.detail.DetailActivity"
+    tools:context=".ui.detail.DetailFragment"
     >
 
     <TextView
@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/recylcerview_adapter"
+        tools:listitem="@layout/recylcerview_item"
         />
 
     <TextView android:id="@+id/currentDateTime"

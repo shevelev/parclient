@@ -15,8 +15,8 @@ class DetailViewModel : ViewModel() {
 
     val apiser = ApiClient.client.create(ApiInterface::class.java)
 
-    fun loadList(nick: String) {
-        val listUsers = apiser.getUser7(nick)
+    fun loadList(nick: String?) {
+        val listUsers = apiser.getUser7(nick!!)
 
         listUsers.enqueue(object : Callback<List<TransLog>> {
             override fun onFailure(call: Call<List<TransLog>>, t: Throwable) {

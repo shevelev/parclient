@@ -1,12 +1,11 @@
 package ru.garagetools.parandroid.ui.detail
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.recylcerview_adapter.view.*
+import kotlinx.android.synthetic.main.recylcerview_item.view.*
 import ru.garagetools.parandroid.R
 import ru.garagetools.parandroid.helper.ItemTouchHelperAdapter
 import ru.garagetools.parandroid.models.TransLog
@@ -14,32 +13,30 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DetailAdapter(
-    private val context: Context,
-    transLogViewModel: DetailViewModel,
-    nick: String
+
+    val transLogViewModel: DetailViewModel,
+    val nick: String?
 ) : RecyclerView.Adapter<DetailAdapter.MyViewHolder>(),
     ItemTouchHelperAdapter {
 
-    //var transLogViewModel = ViewModelProviders.of(FragmentActivity()).get(DetailViewModel::class.java)
-    var t = transLogViewModel
-    val nick = nick
-    private var usersList: MutableList<TransLog> = mutableListOf()
+    private var userDetailList: MutableList<TransLog> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recylcerview_adapter, parent, false)
+            .inflate(R.layout.recylcerview_item, parent, false)
         return MyViewHolder(view)
     }
 
 
-    override fun getItemCount() = usersList.size
+    override fun getItemCount() = userDetailList.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(usersList[position])
+        Log.d("qwe", "bind, position = " + position);
+        holder.bind(userDetailList[position])
     }
 
     fun setUserListItems(usersList: MutableList<TransLog>) {
-        this.usersList = usersList.sortedByDescending { it.trandatetime }.toMutableList()
+        this.userDetailList = usersList.sortedByDescending { it.trandatetime }.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -61,16 +58,7 @@ class DetailAdapter(
     }
 
     override fun onItemDismiss(position: Int) {
-       //deleteUser(position)
-        t.deleteTransLog(position)
-        t.loadList(nick)
+        transLogViewModel.deleteTransLog(position)
+        transLogViewModel.loadList(nick)
     }
-
-//    private fun deleteUser(position: Int) {
-//        val apiser = ApiClient.client.create(ApiInterface::class.java)
-//       d
-//        Toast.makeText(this.context, "удалено",Toast.LENGTH_LONG).show()
-//        notifyItemRemoved(position);
-//        notifyDataSetChanged()
-//    }
 }
