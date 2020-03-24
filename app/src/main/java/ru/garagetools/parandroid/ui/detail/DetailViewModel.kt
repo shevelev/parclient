@@ -1,50 +1,38 @@
 package ru.garagetools.parandroid.ui.detail
 
+import android.os.Handler
 import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import ru.garagetools.parandroid.models.BodyData
 import ru.garagetools.parandroid.models.TransLog
-import ru.garagetools.parandroid.rest.ApiClient
-import ru.garagetools.parandroid.rest.ApiInterface
 
 class DetailViewModel : ViewModel() {
+
+    private val detailRepository = DetailRepository()
+
     var userDetailList: MutableLiveData<List<TransLog>> = MutableLiveData()
 
-    val apiser = ApiClient.client.create(ApiInterface::class.java)
-
     fun loadList(nick: String?) {
-        val getUserDates = apiser.getUser7(nick!!)
-
-        getUserDates.enqueue(object : Callback<List<TransLog>> {
-            override fun onFailure(call: Call<List<TransLog>>, t: Throwable) {
-                Log.d("qwe", "ViewMovel 2 -> Error load Translog ----> ${t.message}")
-            }
-
-            override fun onResponse(
-                call: Call<List<TransLog>>,
-                response: Response<List<TransLog>>
-            ) {
-                if (response.body() != null) {
-                    userDetailList.value = response.body()
-                }
-            }
-        })
+        Log.d("qwe","LoadList")
+        userDetailList = detailRepository.loadList(nick) as MutableLiveData<List<TransLog>>
     }
 
-    fun getListUsers() = userDetailList
+    fun getDetailList() = userDetailList
 
     fun deleteTransLog(position: Int) {
-        userDetailList.value?.get(position)?.idTran?.let { apiser.deleteTransLog(it) }?.enqueue(object : Callback<Int> {
-            override fun onFailure(call: Call<Int>, t: Throwable) {
-                Log.d("qwe", "оштбка")
-            }
 
-            override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                Log.d("qwe", "удалили")
-            }
-        })
+        val tran = userDetailList.value?.get(position)?.idTran
+
+        if (tran != null) {
+            detailRepository.deleteTransLog(tran)
+        }
+    }
+
+    fun addTransLog(bd: BodyData) {
+        detailRepository.addTransLog(bd)
+        Handler().postDelayed({ loadList(bd.nick) }, 2000)
     }
 }

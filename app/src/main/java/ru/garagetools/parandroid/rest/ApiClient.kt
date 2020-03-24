@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ApiClient {
 
     companion object {
-        val baseURL : String = "http://garage-pc127:8081/"
+        val baseURL : String = "http://garage-pc127:8080/"
 
         var retrofit : Retrofit? = null
 
@@ -18,7 +18,7 @@ class ApiClient {
             .create()
 
         val client2 =  OkHttpClient.Builder()
-            .addInterceptor(BasicAuthInterceptor("api", "testpass"))
+            .addInterceptor(BasicAuthInterceptor("api", "@%TG5h"))
             .build()
 
         val client : Retrofit

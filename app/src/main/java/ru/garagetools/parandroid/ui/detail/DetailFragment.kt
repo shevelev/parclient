@@ -5,16 +5,12 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_detail.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.garagetools.parandroid.ui.pickers.DatePickerFragment
 import ru.garagetools.parandroid.R
 import ru.garagetools.parandroid.ui.pickers.TimePickerFragment
@@ -29,13 +25,12 @@ import java.util.*
 
 class DetailFragment : Fragment() {
 
-    val transLogViewModel by lazy { ViewModelProviders.of(this).get(DetailViewModel::class.java) }
+    val transLogViewModel by lazy { ViewModelProvider(requireActivity()).get(DetailViewModel::class.java) }
 
     lateinit var recyclerView: RecyclerView
     lateinit var recyclerAdapter: DetailAdapter
 
     var dateAndTime = Calendar.getInstance()
-    val apiser = ApiClient.client.create(ApiInterface::class.java)
     private var mItemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreateView(
@@ -44,7 +39,6 @@ class DetailFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +59,8 @@ class DetailFragment : Fragment() {
         mItemTouchHelper!!.attachToRecyclerView(recyclerView)
 
         transLogViewModel.loadList(nick)
-        transLogViewModel.getListUsers().observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+        transLogViewModel.userDetailList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it.let {
                 recyclerAdapter.setUserListItems(it as MutableList<TransLog>)
             }
@@ -78,16 +73,8 @@ class DetailFragment : Fragment() {
 
             val bd = BodyData(nick!!, 3, date, time)
 
-            val addDateTime: Call<TransLog> = apiser.createUser(bd)
-            addDateTime.enqueue(object : Callback<TransLog?> {
-                override fun onFailure(call: Call<TransLog?>, t: Throwable) {
-                }
-
-                override fun onResponse(call: Call<TransLog?>, response: Response<TransLog?>) {
-                    Toast.makeText(activity, "Данные добавлены", Toast.LENGTH_LONG).show()
-                    transLogViewModel.loadList(nick)
-                }
-            })
+            transLogViewModel.addTransLog(bd)
+            transLogViewModel.loadList(nick)
         }
 
         dateButton.setOnClickListener {

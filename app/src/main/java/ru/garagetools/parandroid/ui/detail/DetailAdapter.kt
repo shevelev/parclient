@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DetailAdapter(
-    val transLogViewModel: DetailViewModel,
+    private val transLogViewModel: DetailViewModel,
     val nick: String?
 ) : RecyclerView.Adapter<DetailAdapter.MyViewHolder>(),
     ItemTouchHelperAdapter {
