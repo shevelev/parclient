@@ -63,14 +63,9 @@ class DetailFragment : Fragment() {
 
         transLogViewModel.loadList(nick)
 
-//        transLogViewModel.getDetailList().observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//            Log.d("qwe","DetailFragment: getDetailList().observe")
-//            recyclerAdapter.setUserListItems(it as MutableList<TransLog>)
-//
-//        })
+        Log.d("qwe2", "DetailFragment: LIVEDATA: ${transLogViewModel.getDetailList()}")
 
-
-        transLogViewModel.userDetailList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        transLogViewModel.getDetailList().observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it.let {
                 Log.d("qwe","DetailFragment: userDetailList.observe")
                 recyclerAdapter.setUserListItems(it as MutableList<TransLog>)
@@ -85,7 +80,7 @@ class DetailFragment : Fragment() {
             val bd = BodyData(nick!!, 3, date, time)
 
             transLogViewModel.addTransLog(bd)
-            transLogViewModel.loadList(nick)
+            transLogViewModel.loadList(bd.nick)
         }
 
         dateButton.setOnClickListener {

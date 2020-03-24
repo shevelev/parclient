@@ -34,7 +34,7 @@ class DetailAdapter(
     }
 
     fun setUserListItems(usersList: MutableList<TransLog>) {
-        Log.d("qwer","DetailAdapter: setUserListItems -> ${usersList.size}")
+        Log.d("qwe","DetailAdapter: setUserListItems -> ${usersList.size}")
         this.userDetailList = usersList.sortedByDescending { it.trandatetime }.toMutableList()
         notifyDataSetChanged()
     }
@@ -57,6 +57,7 @@ class DetailAdapter(
 
     override fun onItemDismiss(position: Int) {
         Log.d("qwe", "DetailAdapter: onItemDismiss")
+        Log.d("qwe2","DetailAdapter: LIVEDATA: " + transLogViewModel.getDetailList().toString())
         transLogViewModel.deleteTransLog(position)
         transLogViewModel.loadList(nick)
     }

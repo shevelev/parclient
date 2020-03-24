@@ -17,13 +17,15 @@ import ru.garagetools.parandroid.rest.ApiInterface
 class DetailRepository {
     private val webservice = ApiClient.client.create(ApiInterface::class.java)
 
-    fun loadList(nick: String?): LiveData<List<TransLog>> {
+    fun loadList(nick: String?): MutableLiveData<List<TransLog>> {
         val data = MutableLiveData<List<TransLog>>()
-
         if (nick != null) {
             webservice.getUser7(nick).enqueue(object : Callback<List<TransLog>> {
                 override fun onFailure(call: Call<List<TransLog>>, t: Throwable) {
-                    Log.d("qwe", "webservice: DetailRepository -> Error load Translog ----> ${t.message}")
+                    Log.d(
+                        "qwe",
+                        "webservice: DetailRepository -> Error load Translog ----> ${t.message}"
+                    )
                 }
 
                 override fun onResponse(
@@ -31,12 +33,13 @@ class DetailRepository {
                     response: Response<List<TransLog>>
                 ) {
                     if (response.body() != null) {
-                        data.value = response.body()
+                        data.postValue(response.body())
                     }
                 }
+
             })
         }
-        Log.d("qwe","webservice: LoadList -> nick: $nick")
+        Log.d("qwe", "webservice: LoadList -> nick: $nick")
         return data
     }
 
@@ -62,4 +65,37 @@ class DetailRepository {
             }
         })
     }
+
+
+    fun loadList2(nick: String?): List<TransLog> {
+        var data = mutableListOf<TransLog>()
+        if (nick != null) {
+            webservice.getUser7(nick).enqueue(object : Callback<List<TransLog>> {
+                override fun onFailure(call: Call<List<TransLog>>, t: Throwable) {
+                    Log.d(
+                        "qwe",
+                        "webservice: DetailRepository -> Error load Translog ----> ${t.message}"
+                    )
+                }
+
+                override fun onResponse(
+                    call: Call<List<TransLog>>,
+                    response: Response<List<TransLog>>
+                ) {
+                    if (response.body() != null) {
+                        val t = response.body()!!
+                        for (e in t) {
+                            data.add(e)
+                            var dd = data.size
+                        }
+                        //data += response.body()!!
+                    }
+                }
+
+            })
+        }
+        Log.d("qwe", "webservice: LoadList -> nick: $nick")
+        return data
+    }
+
 }
