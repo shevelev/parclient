@@ -23,7 +23,7 @@ class DetailRepository {
         if (nick != null) {
             webservice.getUser7(nick).enqueue(object : Callback<List<TransLog>> {
                 override fun onFailure(call: Call<List<TransLog>>, t: Throwable) {
-                    Log.d("qwe", "DetailRepository -> Error load Translog ----> ${t.message}")
+                    Log.d("qwe", "webservice: DetailRepository -> Error load Translog ----> ${t.message}")
                 }
 
                 override fun onResponse(
@@ -36,29 +36,29 @@ class DetailRepository {
                 }
             })
         }
+        Log.d("qwe","webservice: LoadList -> nick: $nick")
         return data
     }
 
     fun deleteTransLog(tranId: Int) {
         webservice.deleteTransLog(tranId).enqueue(object : Callback<Int> {
             override fun onFailure(call: Call<Int>, t: Throwable) {
-                Log.d("qwe", "error delete $tranId")
+                Log.d("qwe", "webservice: error delete $tranId")
             }
 
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                Log.d("qwe", "$tranId delete")
+                Log.d("qwe", "webservice: $tranId delete")
             }
         })
     }
 
     fun addTransLog(bd: BodyData) {
-
         webservice.createUser(bd).enqueue(object : Callback<TransLog?> {
             override fun onFailure(call: Call<TransLog?>, t: Throwable) {
             }
 
             override fun onResponse(call: Call<TransLog?>, response: Response<TransLog?>) {
-                Log.d("qwe", "add ${bd.nick} --> ${bd.date} ${bd.time}")
+                Log.d("qwe", "webservice: add nick: ${bd.nick} --> ${bd.date} ${bd.time}")
             }
         })
     }

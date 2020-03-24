@@ -13,11 +13,11 @@ class DetailViewModel : ViewModel() {
 
     private val detailRepository = DetailRepository()
 
-    var userDetailList: MutableLiveData<List<TransLog>> = MutableLiveData()
+    var userDetailList: LiveData<List<TransLog>> = MutableLiveData()
 
     fun loadList(nick: String?) {
-        Log.d("qwe","LoadList")
-        userDetailList = detailRepository.loadList(nick) as MutableLiveData<List<TransLog>>
+        Log.d("qwe","DetailViewModel: LoadList -> nick: $nick")
+        userDetailList = detailRepository.loadList(nick)
     }
 
     fun getDetailList() = userDetailList
@@ -33,6 +33,6 @@ class DetailViewModel : ViewModel() {
 
     fun addTransLog(bd: BodyData) {
         detailRepository.addTransLog(bd)
-        Handler().postDelayed({ loadList(bd.nick) }, 2000)
+        Handler().postDelayed({ loadList(bd.nick) }, 5000)
     }
 }

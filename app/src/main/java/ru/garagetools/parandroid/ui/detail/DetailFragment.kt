@@ -2,11 +2,13 @@ package ru.garagetools.parandroid.ui.detail
 
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +27,8 @@ import java.util.*
 
 class DetailFragment : Fragment() {
 
-    val transLogViewModel by lazy { ViewModelProvider(requireActivity()).get(DetailViewModel::class.java) }
+    val transLogViewModel by lazy { ViewModelProviders.of(this).get(DetailViewModel::class.java) }
+//    val transLogViewModel by lazy { ViewModelProvider(requireActivity()).get(DetailViewModel::class.java) }
 
     lateinit var recyclerView: RecyclerView
     lateinit var recyclerAdapter: DetailAdapter
@@ -60,8 +63,16 @@ class DetailFragment : Fragment() {
 
         transLogViewModel.loadList(nick)
 
+//        transLogViewModel.getDetailList().observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            Log.d("qwe","DetailFragment: getDetailList().observe")
+//            recyclerAdapter.setUserListItems(it as MutableList<TransLog>)
+//
+//        })
+
+
         transLogViewModel.userDetailList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it.let {
+                Log.d("qwe","DetailFragment: userDetailList.observe")
                 recyclerAdapter.setUserListItems(it as MutableList<TransLog>)
             }
         })
