@@ -58,7 +58,7 @@ class DetailAdapter(
     override fun onItemDismiss(position: Int) {
         Log.d("qwe", "DetailAdapter: onItemDismiss")
         Log.d("qwe2","DetailAdapter: LIVEDATA: " + transLogViewModel.getDetailList().toString())
-        transLogViewModel.deleteTransLog(position)
+        transLogViewModel.deleteTransLog(nick, position)
         transLogViewModel.loadList(nick)
     }
 }

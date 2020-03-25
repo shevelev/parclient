@@ -52,12 +52,12 @@ class DetailViewModel : ViewModel() {
 
     fun getDetailList() = this.userDetailList
 
-    fun deleteTransLog(position: Int) {
+    fun deleteTransLog(nick: String?, position: Int) {
 
         val tran = this.userDetailList.value?.get(position)?.idTran
 
-        if (tran != null) {
-            detailRepository.deleteTransLog(tran)
+        if (tran != null && nick !=null) {
+            detailRepository.deleteTransLog(nick, tran)
         }
     }
 

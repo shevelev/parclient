@@ -21,7 +21,7 @@ interface ApiInterface {
     @POST("api/users/add")
     fun createUser(@Body bodyData: BodyData): Call<TransLog>
 
-    @DELETE("api/users/id/{id}")
-    fun deleteTransLog(@Path("id") id: Int): Call<Int>
+    @DELETE("api/users/{name}/{id}")
+    fun deleteTransLog(@Path("name") name: String,@Path("id") id: Int): Call<Int>
 
 }

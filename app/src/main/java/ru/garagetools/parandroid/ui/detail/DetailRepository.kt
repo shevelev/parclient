@@ -43,8 +43,8 @@ class DetailRepository {
         return data
     }
 
-    fun deleteTransLog(tranId: Int) {
-        webservice.deleteTransLog(tranId).enqueue(object : Callback<Int> {
+    fun deleteTransLog(name: String, tranId: Int) {
+        webservice.deleteTransLog(name, tranId).enqueue(object : Callback<Int> {
             override fun onFailure(call: Call<Int>, t: Throwable) {
                 Log.d("qwe", "webservice: error delete $tranId")
             }
